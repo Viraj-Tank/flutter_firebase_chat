@@ -11,7 +11,7 @@ class ChatScreen extends StatelessWidget {
         title: const Text('Chat Screen'),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('').snapshots(),
+        stream: FirebaseFirestore.instance.collection('chats/fOaXwmQ4o8rHo5siXwBs/messages').snapshots(),
         builder: (ctx, streamSnapshot) {
           if (streamSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -29,7 +29,7 @@ class ChatScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          FirebaseFirestore.instance.collection('').add({
+          FirebaseFirestore.instance.collection('chats/fOaXwmQ4o8rHo5siXwBs/messages').add({
             'text':'Added from fab button'
           });
         },

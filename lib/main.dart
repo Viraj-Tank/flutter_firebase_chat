@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase/screens/chat_screen.dart';
+import 'package:flutter_firebase/screens/auth_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,10 +13,22 @@ class ChatApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Chat App',
+      theme: ThemeData(
+        backgroundColor: Colors.pink,
+        primaryColor: Colors.pink,
+        buttonTheme: ButtonTheme.of(context).copyWith(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.pink).copyWith(secondary: Colors.deepPurple),
+      ),
       debugShowCheckedModeBanner: false,
-      home: ChatScreen(),
+      home: AuthScreen(),
     );
   }
 }
+
+///button theme used to style the button used in whole application
