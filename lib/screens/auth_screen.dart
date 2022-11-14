@@ -24,7 +24,6 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       if (isLogin) {
         await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value) {
-          saveUserInCollection(value,username,email);
           debugPrint('printlog login success');
         });
       } else {
