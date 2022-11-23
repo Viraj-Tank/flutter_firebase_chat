@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/widgets/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
-  AuthForm({Key? key, required this.submitFn,}) : super(key: key);
+  AuthForm({
+    Key? key,
+    required this.submitFn,
+  }) : super(key: key);
 
   final void Function(String email, String password, String username, bool isLogin) submitFn;
 
@@ -29,8 +33,11 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if(!_isLogin)
+                  const UserImagePicker(),
                   TextFormField(
-                    key: const ValueKey('email'),   ///used to differentiate all textform fields so data dont lose its integrity
+                    key: const ValueKey('email'),
+                    ///used to differentiate all textform fields so data dont lose its integrity
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'Email',
@@ -45,24 +52,24 @@ class _AuthFormState extends State<AuthForm> {
                       _userEmail = value;
                     },
                   ),
-                  if(!_isLogin)
-                  TextFormField(
-                    key: const ValueKey('uName'),
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
+                  if (!_isLogin)
+                    TextFormField(
+                      key: const ValueKey('uName'),
+                      decoration: const InputDecoration(
+                        labelText: 'Username',
+                      ),
+                      validator: (value) {
+                        if (value?.isEmpty == true) {
+                          return 'enter user name';
+                        } else if (value!.length < 4) {
+                          return 'enter at least 4 character in user name';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _userName = value;
+                      },
                     ),
-                    validator: (value) {
-                      if (value?.isEmpty == true) {
-                        return 'enter user name';
-                      } else if (value!.length < 4) {
-                        return 'enter at least 4 character in user name';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _userName = value;
-                    },
-                  ),
                   TextFormField(
                     key: const ValueKey('password'),
                     decoration: const InputDecoration(
@@ -84,7 +91,7 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                   ElevatedButton(
                     onPressed: _trySubmit,
-                    child: Text(_isLogin ? 'Login': 'Sign Up'),
+                    child: Text(_isLogin ? 'Login' : 'Sign Up'),
                   ),
                   TextButton(
                     onPressed: () {
@@ -92,7 +99,7 @@ class _AuthFormState extends State<AuthForm> {
                         _isLogin = !_isLogin;
                       });
                     },
-                    child: Text(_isLogin ? 'Create New Account': 'Already have an account?'),
+                    child: Text(_isLogin ? 'Create New Account' : 'Already have an account?'),
                   )
                 ],
               ),
@@ -108,12 +115,7 @@ class _AuthFormState extends State<AuthForm> {
       _formKey.currentState?.save(); // it will trigger onSaved method on every textFormField available in the _formKey
 
       FocusScope.of(context).unfocus(); //remove the focus from textFields if any
-    widget.submitFn(
-      _userEmail!,
-      _userName!,
-      _userPassword!,
-      _isLogin
-    );
+      widget.submitFn(_userEmail!, _userName!, _userPassword!, _isLogin);
     }
   }
 }
