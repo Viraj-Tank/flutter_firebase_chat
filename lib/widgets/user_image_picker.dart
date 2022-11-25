@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserImagePicker extends StatefulWidget {
-  const UserImagePicker({Key? key}) : super(key: key);
+  Function(File pickedImage)? imagePickFn;
+  UserImagePicker({Key? key,this.imagePickFn}) : super(key: key);
 
   @override
   State<UserImagePicker> createState() => _UserImagePickerState();
@@ -34,9 +35,11 @@ class _UserImagePickerState extends State<UserImagePicker> {
 
   _pickImage() async {
     /// create dialog with gallery and camera icon to let user choose which to open
-    final pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
-    setState(() {
-      _pickedImage = pickedImage;
+    await ImagePicker().pickImage(source: ImageSource.camera).then((value){
+      setState(() {
+        _pickedImage = value;
+      });
+      widget.imagePickFn!(File(value!.path));
     });
   }
 

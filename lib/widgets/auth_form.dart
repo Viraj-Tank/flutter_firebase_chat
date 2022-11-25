@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/widgets/user_image_picker.dart';
 
@@ -19,6 +21,7 @@ class _AuthFormState extends State<AuthForm> {
   String? _userEmail = '';
   String? _userName = '';
   String? _userPassword = '';
+  File? _userImageFile;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +36,7 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if(!_isLogin)
-                  const UserImagePicker(),
+                    if (!_isLogin) UserImagePicker(imagePickFn: _pickedImage),
                   TextFormField(
                     key: const ValueKey('email'),
                     ///used to differentiate all textform fields so data dont lose its integrity
@@ -111,11 +113,20 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   void _trySubmit() {
+    if (_userImageFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please pick an image')),
+      );
+    }
     if (_formKey.currentState?.validate() == true) {
       _formKey.currentState?.save(); // it will trigger onSaved method on every textFormField available in the _formKey
 
       FocusScope.of(context).unfocus(); //remove the focus from textFields if any
       widget.submitFn(_userEmail!, _userName!, _userPassword!, _isLogin);
     }
+  }
+
+  void _pickedImage(File image) {
+    _userImageFile = image;
   }
 }
