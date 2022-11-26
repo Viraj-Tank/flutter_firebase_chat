@@ -9,7 +9,7 @@ class AuthForm extends StatefulWidget {
     required this.submitFn,
   }) : super(key: key);
 
-  final void Function(String email, String password, String username, bool isLogin) submitFn;
+  final void Function(String email, String userName, String password,File? image, bool isLogin) submitFn;
 
   @override
   State<AuthForm> createState() => _AuthFormState();
@@ -36,9 +36,10 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                    if (!_isLogin) UserImagePicker(imagePickFn: _pickedImage),
+                  if (!_isLogin) UserImagePicker(imagePickFn: _pickedImage),
                   TextFormField(
                     key: const ValueKey('email'),
+
                     ///used to differentiate all textform fields so data dont lose its integrity
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
@@ -117,12 +118,19 @@ class _AuthFormState extends State<AuthForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please pick an image')),
       );
+      return;
     }
     if (_formKey.currentState?.validate() == true) {
       _formKey.currentState?.save(); // it will trigger onSaved method on every textFormField available in the _formKey
 
       FocusScope.of(context).unfocus(); //remove the focus from textFields if any
-      widget.submitFn(_userEmail!, _userName!, _userPassword!, _isLogin);
+      widget.submitFn(
+        _userEmail!,
+        _userName!,
+        _userPassword!,
+        _userImageFile,
+        _isLogin,
+      );
     }
   }
 
