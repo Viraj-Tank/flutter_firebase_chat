@@ -114,7 +114,7 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   void _trySubmit() {
-    if (_userImageFile == null) {
+    if (_userImageFile == null && !_isLogin) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please pick an image')),
       );
