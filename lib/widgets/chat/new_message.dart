@@ -46,7 +46,7 @@ class _NewMessageState extends State<NewMessage> {
     final fireStoreUser = await FirebaseFirestore.instance.collection('users').doc('${user?.uid}').get();
     _messageController.clear();
     FirebaseFirestore.instance.collection('chat').add(
-      {'text': _enteredMessage, 'createdAt': Timestamp.now(), 'userId': user?.uid,'username':fireStoreUser['username']},
+      {'text': _enteredMessage, 'createdAt': Timestamp.now(), 'userId': user?.uid,'username':fireStoreUser['username'],'userImage':fireStoreUser['image_url']},
     );
   }
 }
